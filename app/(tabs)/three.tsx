@@ -1,8 +1,8 @@
 import { ActivityIndicator,FlatList,StyleSheet } from 'react-native'
 
 import { Text,View } from '@/components/Themed'
+import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
-import { useQuery } from 'react-query'
 
 export default function TabThreeScreen() {
   const { data, isLoading } = useTodo()
@@ -35,9 +35,18 @@ const styles = StyleSheet.create({
 });
 
 function useTodo() {
-  return useQuery('todos', async () => {
-    const response = await axios.get<Todo[]>('http://jsonplaceholder.typicode.com/todos')
-    return response.data
+  return useQuery({
+    queryKey: ['todos'],
+    queryFn: async () => {
+      const response = await axios.get<Todo[]>('http://jsonplaceholder.typicode.com/todos')
+      console.log(response.data)
+      return response.data
+    },
+    throwOnError: (error) => {
+      // Does not throw by default anymore.
+      console.log(error.message)
+      return true;
+    },
   })
 }
 
