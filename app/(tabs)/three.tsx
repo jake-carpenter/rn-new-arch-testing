@@ -36,11 +36,8 @@ const styles = StyleSheet.create({
 
 function useTodo() {
   return useQuery('todos', async () => {
-    // These are failing for me with HTTPS for some weird reason.
     const response = await axios.get<Todo[]>('http://jsonplaceholder.typicode.com/todos')
     return response.data
-  },
-  {
   })
 }
 
